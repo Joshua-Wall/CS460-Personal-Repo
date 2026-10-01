@@ -23,7 +23,35 @@ public static class ScheduleCalculator
         foreach (var token in input.Split(Delimiters, StringSplitOptions.RemoveEmptyEntries))
         {
             int i = 0;
-            while (i < token.Length * *char.IsLetter(token[i])) i++;
+            while (i < token.Length && char.IsLetter(token[i])) i++;
+
+            string day = token[..i].ToUpperInvariant();
+            // Conditionals that when broken kick you out.
+            if (!AllDays.Contains(day)) continue;
+            if (!int.TryParse(token[i..], out int hour)) continue;
+            if (hour < StartHour || hour > EndHour) continue;
+
+            busy.Add((day, hour));
         }
+        return busy;
+    }
+
+
+    public static HashSet<(string Day, int Hour)> CalculateFreeTimes(string? input, bool incluedeweekends)
+    {
+        var busy = ParseBusyTimes(input);
+        var free = new HashSet<(string Day, int Hour)>();
+
+        foreach (var day in GetDays(includeWeekends))
+        {
+            for (int hour = StartHour; hour <= EndHour; hour++)
+            {
+                if (!busy.Contains((day, hour)))
+                {
+                    free.Add((day, hour));
+                }
+            }
+        }
+        return free;
     }
 }
