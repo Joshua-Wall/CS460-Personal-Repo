@@ -13,6 +13,15 @@ public class HomeController : Controller
         return View(model);
     }
 
+    [HttpPost]
+    public IActionResult Index(ScheduleViewModel model)
+    {
+        model.Days = ScheduleCalculator.GetDays(model.IncludeWeekends);
+        model.FreeTimes = ScheduleCalculator.CalculateFreeTimes(model.BusyTimes, model.IncludeWeekends);
+        model.HasResults = true;
+        return View(model);
+    }
+
     public IActionResult Privacy()
     {
         return View();
@@ -24,15 +33,4 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    [HttpGet]
-    public IActionResult FillSchedule()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public IActionResult SendSchedule()
-    {
-        return View();
-    }
 }
