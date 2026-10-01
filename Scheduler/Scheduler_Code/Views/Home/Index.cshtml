@@ -1,5 +1,17 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model Scheduler_Code.Models.ScheduleViewModel
+@{
+    ViewData["Title"] = "Busy Work Scheduler";
+
+    var dayNames = new Dictionary<string, string>
+    {
+        ["SU"] = "Sunday",
+        ["M"] = "Monday",
+        ["T"] = "Tuesday",
+        ["W"] = "Wednesday",
+        ["R"] = "Thursday",
+        ["F"] = "Friday",
+        ["SA"] = "Saturday"
+    };
 }
 
 <div class="text-center">
@@ -9,77 +21,62 @@
 <!--Div for informational substances -->
 <div>
     <p>Enter the days and times everyone is busy</p>
-    <p>Using this Format: (<span style="color: red;">M15 T09 SU14 SA11 F08</span>)</p>
+    <p>Using this Format: (<code>M8 T12 W9 W9 R14</code>)</p>
     <p>Where Sunday and Saturday are abbrevieated as SU, M, T, W, R, F, SA and tiems go from 8 to 16</p>
+    <p>You can separate entries with a space, commas, dashes, semi-colons, and colons.</p>
 </div>
 <!-- For inputting the information into the table-->
-<div>
-    <p> Busy times</p>
-    <form asp-action="FillSchedule" method="post">
-        <div class="form-group">
-            <label for="Home" class="form-label">Example Textarea</label>
-            <textarea class="form-control" id="Home" rows="3"></textarea>
-        </div>
-    </form>
-</div>
-
-<!-- Add a break here so it looiks a lil nicer-->
-<br />
-<br />
-
-<div>
-    <table class="table">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">Time</th>
-                <th scope="col">Sunday</th>
-                <th scope="col">Monday</th>
-                <th scope="col">Tuesday</th>
-                <th scope=col">Wednesday</th>
-                <th scope=col">Thursday</th>
-                <th scope=col">Friday</th>
-                <th scope=col">Saturday</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">8:00</th>
-            </tr>
-            <tr>
-                <th scope="row">9:00</th>
-            </tr>
-            <tr>
-                <th scope="row">10:00</th>
-            </tr>
-            <tr>
-                <th scope="row">11:00</th>
-            </tr>
-            <tr>
-                <th scope="row">12:00</th>
-            </tr>
-            <tr>
-                <th scope="row">13:00</th>
-            </tr>
-            <tr>
-                <th scope="row">14:00</th>
-            </tr>
-            <tr>
-                <th scope="row">15:00</th>
-            </tr>
-            <tr>
-                <th scope="row">16:00</th>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<br />
-
-<div>
-    <!--Have to add inluce weekends :|-->
-    <input type="checkbox" />
-    <label>Include Weekends</label>
-</div>
+<form asp-action="Index" method="post">
+    <div class="form-group">
+        <label asp-for="BusyTimes" class="form-label">Busy Times</label>
+        <textarea asp-for="BusyTimes" class="form-control" rows="3"></textarea>
+    </div>
 
 
-<button class="btn btn-primary" type="submit">Submit</button>
+    <!-- Add a break here so it looiks a lil nicer-->
+    <br />
+    <br />
+
+    <div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Time</th>
+                    @foreach (var day in Model.Days)
+                    {
+                        <th scope="col">@dayNames[day]</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var hour in Model.Hours)
+                {
+                    <tr>
+                        <th scope="row">@($"{hour}:00")</th>
+                        @foreach (var day in Model.Days)
+                        {
+                            if (Model.HasResults && Model.FreeTimes.Contains((day, hour)))
+                            {
+                                <td class="table-success">Free</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <br />
+
+    <div class="form-check mb-3">
+        <input asp-for="IncludeWeekends" class="form-check-input" />
+        <label asp-for="IncludeWeekends" class="form-check-label">Include Weekends</label>
+    </div>
+
+
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>
