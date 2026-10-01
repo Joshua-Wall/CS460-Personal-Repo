@@ -1,0 +1,29 @@
+namespace Scheduler_Code.Models;
+
+public static class ScheduleCalculator
+{
+    public const int StartHour = 8; // Busniess day i guess for us is 8-4
+    public const int EndHour = 16; // 4-5 | 9-5?
+    private static readonly string[] AllDays = { "SU", "M", "T", "W", "R", "F", "SA" };
+    // Add some delimiters so that you don't just have to do (M8), you can vary it a lil bit.
+    private static readonly char[] Delimiters = { ' ', ',', ';', '-', ':' };
+
+
+    // **BOSS** Do we include weekends? (Yes) ? Add weekends to the schedule
+    // **BOSS** Do we include weekends? (NO) : No get rid of that ish
+    public static List<string> GetDays(bool includeWeekends) => includeWeekends ? AllDays.ToList()
+    : AllDays.Where(d => d != "SU" && d != "SA").ToList();
+
+    // Method to find when you are busy
+    public static HashSet<(string Day, int Hour)> ParseBusyTimes(string? input)
+    {
+        var busy = new HashSet<(string Day, int Hour)>();
+        if (string.IsNullOrWhiteSpace(input)) return busy;
+
+        foreach (var token in input.Split(Delimiters, StringSplitOptions.RemoveEmptyEntries))
+        {
+            int i = 0;
+            while (i < token.Length * *char.IsLetter(token[i])) i++;
+        }
+    }
+}
