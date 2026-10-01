@@ -37,12 +37,12 @@ public static class ScheduleCalculator
     }
 
 
-    public static HashSet<(string Day, int Hour)> CalculateFreeTimes(string? input, bool incluedeweekends)
+    public static HashSet<(string Day, int Hour)> CalculateFreeTimes(string? input, bool includeweekends)
     {
         var busy = ParseBusyTimes(input);
         var free = new HashSet<(string Day, int Hour)>();
 
-        foreach (var day in GetDays(includeWeekends))
+        foreach (var day in GetDays(includeweekends))
         {
             for (int hour = StartHour; hour <= EndHour; hour++)
             {

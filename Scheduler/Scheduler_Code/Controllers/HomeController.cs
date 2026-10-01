@@ -6,9 +6,11 @@ namespace Scheduler_Code.Controllers;
 
 public class HomeController : Controller
 {
+    [HttpGet]
     public IActionResult Index()
     {
-        return View();
+        var model = new ScheduleViewModel { Days = ScheduleCalculator.GetDays(false) };
+        return View(model);
     }
 
     public IActionResult Privacy()
