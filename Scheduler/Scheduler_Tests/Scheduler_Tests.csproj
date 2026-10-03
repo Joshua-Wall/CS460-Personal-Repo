@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Scheduler_Code\Scheduler_Code.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <FremeWorkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
 </Project>
