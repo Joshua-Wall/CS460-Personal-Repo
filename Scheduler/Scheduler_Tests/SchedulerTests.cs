@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Reflection;
+using NUnit.Framework;
 using Scheduler_Code.Models;
 
 namespace Scheduler_Tests;
@@ -17,7 +18,16 @@ public class ScheduleCalculatorTests
         Assert.That(result, Does.Contain(("T", 12)));
         Assert.That(result, Does.Contain(("W", 9)));
     }
-    // 2
+    // 2 Test if the user has put nothing. "" or some whistepace "   "
+    [TestCase("")]
+    [TestCase("      ")]
+    public void ParseBuyTimes_EmptyOrWhitespace_ReturnsNoBusyTimse(string input)
+    {
+        var result = ScheduleCalculator.ParseBusyTimes(input);
+
+        Assert.That(result, Is.Empty);
+    }
+
 
     // 3
 
