@@ -52,8 +52,17 @@ public class ScheduleCalculatorTests
         Assert.That(result, Does.Contain(("M", 8)));
     }
 
+    // 5 If you didn't follow the rules it wont' count.
+    [Test]
+    public void ParseBusyTimes_InvalidEntries_AreIgnored()
+    {
+        // Th10 Clash of clans??? unknown day, M18 and M7 are all outside that 8-16
+        var result = ScheduleCalculator.ParseBusyTimes("Th10 M18 M7 X9 Mfoo M 8 F16");
 
-    // 5 
+        Assert.That(result, Has.Count.EqualTo(1));
+        Assert.That(result, Does.Contain(("F", 16)));
+    }
+
 
     // 6
 }
