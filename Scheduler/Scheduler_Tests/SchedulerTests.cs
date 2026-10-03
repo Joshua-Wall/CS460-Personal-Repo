@@ -65,4 +65,17 @@ public class ScheduleCalculatorTests
 
 
     // 6
+    [Test]
+    public void CalculateFreeTimes_WeekdaysOnly_ExcludesBusyAndWeekendSlots()
+    {
+        var free = ScheduleCalculator.CalculateFreeTimes("M8 T12 SU10", includeweekends: false);
+
+        // If we do 5 days a week and we have 9 hours 8,9,10,11,12,13,14,15,16
+        // That means minus the 2 weekdays then we should ahve 43
+        Assert.That(free, Has.Count.EqualTo(43));
+        Assert.That(free, Does.Not.Contain(("M", 8)));
+        Assert.That(free, Does.Not.Contain(("T", 12)));
+        Assert.That(free, Does.Contain(("M", 9)));
+        Assert.That(free.Any(slot => slot.Day == "SU" || slot.Day == "SA"), Is.False);
+    }
 }
